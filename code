@@ -1,0 +1,49 @@
+/******************************************************************************
+
+*******************************************************************************/
+#include <bits/stdc++.h>
+
+using namespace std;
+unordered_set<string> setList;
+    
+    int findWord(string& a, int idx) {
+        if (idx == a.size()||setList.count(a)) {
+            return 1;
+        }
+        for (int i = idx; i < a.size(); ++i) {
+            if (setList.count(a.substr(idx, i - idx + 1))) {
+                if(setList.count(a.substr( i - idx + 1)))return 1;
+                if (findWord(a, i + 1)) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    
+   
+int main()
+{
+        //list of words
+        vector<string> wordList = {"cats","cat","dog","catsdogcats", "rats", "catsrats"};
+        vector<string> res;
+        //sort list of words
+        sort(wordList.begin(), wordList.end(), [&](string& a, string& b) {
+            if (a.size() == b.size()) {
+                return a < b;
+            }
+            return a.size() < b.size();
+        });
+        for (int j=0;j<wordList.size();j++) {
+            if (findWord(wordList[j], 0)) {
+                res.push_back(wordList[j]);
+            }
+            setList.insert(wordList[j]);
+        }
+        //largest
+        if(res.size()>0)
+            cout<<res[res.size()-1]<<" ";
+        //second largest
+        if(res.size()>1)
+            cout<<res[res.size()-2];
+}
